@@ -12,5 +12,5 @@ This manifest will deploy the DMTF [Redfish-Mockup-Server](https://github.com/DM
 ## Usage
 
 ```
-kubectl apply -f ./deploy_redfish_mockup.yaml
+kubectl apply -f ./deployRedfishMockupServer.yaml
 ```
