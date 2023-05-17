@@ -9,3 +9,8 @@ This manifest will deploy the DMTF [Redfish-Mockup-Server](https://github.com/DM
 
 * This manifest deploys a LoadBalancer service using [MetalLB](https://metallb.org/ "https://metallb.org/").  Update the deployment as desired for other service types.
 
+## Usage
+
+```
+kubectl apply -f ./deploy_redfish_mockup.yaml
+```
