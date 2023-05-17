@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redfish-deployment
+spec:
+  selector:
+    matchLabels:
+      app: redfish
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redfish
+    spec:
+      initContainers:
+      - name: copy-zip-file
+        image: busybox:latest
+        command: ["sh", "-c", "wget -P /mockups https://www.dmtf.org/sites/default/files/standards/documents/DSP2043_2022.3.zip ; unzip /mockups/DSP2043_2022.3.zip -d /mockups"]
+# ZIP file above containing all public Redfish mockups is obtained from https://www.dmtf.org/dsp/DSP2043
+        volumeMounts:
+        - name: mockups
+          mountPath: /mockups
+      containers:
+      - name: redfish
+        image: dmtf/redfish-mockup-server:latest
+        args: ["-D", "/mockups/public-bladed", "--short-form"]
+# Available mockups include:
+# public-bladed, public-catfish, public-constrained-composition, public-nvmeof-jbof, public-pmem-configuration, public-sasfabric, public-tower
+# public-bladed-partitions, public-composability, public-expansion-box, public-oem-examples  public-power-shelf, public-smartnic
+# public-acd, public-cables, public-compose-action, public-localstorage, public-pdu, public-rackmount1, public-telemetry
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: mockups
+          mountPath: /mockups
+      volumes:
+      - name: mockups
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redfish
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.50.247
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: redfish
+  type: LoadBalancer
