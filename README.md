@@ -19,9 +19,12 @@ example. The following section of the manifest file shows how to select a partic
 
 ## Requirements
 
-* This manifest deploys a LoadBalancer service using [MetalLB](https://metallb.org/ "https://metallb.org/").  Update the deployment as desired for other service types.
+* This manifest deploys a LoadBalancer service using [MetalLB](https://metallb.org/ "https://metallb.org/").  You will likely need to change the IP address used as this is specific to my local MetalLB configuration.
+* Update the deployment as desired for other service types.
 
 ## Usage
+
+Edit the manifest to select the desired mockup (if different than ```public-bladed```) and then run the following command to apply the deployment:
 
 ```
 kubectl apply -f ./deployRedfishMockupServer.yaml
